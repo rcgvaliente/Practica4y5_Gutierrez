@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md flex flex-center container">
-    <div class="row items-center q-gutter-sm">
+    <div class="inputs-container row items-center justify-center q-gutter-sm">
       <q-form @submit="submitForm" class="row items-center q-gutter-sm">
         <q-input
           v-model="fechaInicio"
@@ -52,18 +52,25 @@
       </q-form>
     </div>
 
-    <div class="row justify-center">
+    <!-- Contenedor para las cards -->
+    <div class="row justify-center" style="width: 100%; flex-wrap: wrap">
       <div
         v-for="informacion in informaciones"
         :key="informacion.date"
         class="card-container"
       >
-        <q-card class="my-card" style="width: 350px">
+        <q-card class="my-card" style="width: 350px; margin: 10px">
           <q-img
             :src="informacion.url"
             style="max-height: 200px; object-fit: cover"
           >
-            <div class="absolute-bottom text-h6">{{ informacion.title }}</div>
+            <div class="absolute-bottom text-h6">
+              Titulo: {{ informacion.title }} <br />
+              Fecha: {{ informacion.date }} <br />
+              <span v-if="informacion.copyright"
+                >Copyright: {{ informacion.copyright }}</span
+              >
+            </div>
           </q-img>
 
           <q-card-section class="card-content">
@@ -89,7 +96,10 @@ export default {
   methods: {
     async submitForm() {
       if (this.fechaInicio === "" && this.fechaFin === "") {
-        // Manejo del caso cuando las fechas están vacías
+        this.$q.notify({
+          type: "negative",
+          message: `Favor ingresar las fechas`,
+        });
         return;
       }
 
@@ -119,7 +129,7 @@ export default {
 
 <style>
 .card-container {
-  padding: 20px;
+  padding: 10px;
 }
 
 .my-card {
@@ -131,5 +141,17 @@ export default {
 .card-content {
   flex: 1;
   overflow-y: auto;
+}
+
+.cards-container {
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputs-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 </style>
